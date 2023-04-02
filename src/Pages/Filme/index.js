@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import './filme-info.css';
 import api from '../../services/api';
 
 function Filme(){
   const { id } = useParams();
+  const navigate = useNavigate();
+
   const [filme, setFilme] = useState({});
   const [loading, setLoading] = useState(true);
 
@@ -12,7 +14,7 @@ function Filme(){
     async function loadFilme(){
       await api.get(`/movie/${id}`, {
         params:{
-          api_key: "28fc232cc001c31e8a031f419d0a14ca",
+          api_key: "d330c193d76504d0b0c0a8780235060c",
           language: "pt-BR",
         }
       })
@@ -21,7 +23,9 @@ function Filme(){
         setLoading(false);
       })
       .catch(()=>{
-        console.log("FILME NAO ENCONTRADO")
+        console.log("FILME NAO ENCONTRADO");
+        navigate("/", { replace: true });
+        return;
       })
     }
 
@@ -31,7 +35,26 @@ function Filme(){
     return () => {
       console.log("COMPONENTE FOI DESMONTADO")
     }
-  }, [])
+  }, [navigate, id])
+
+
+  function salvarFilme(){
+    const minhaLista = localStorage.getItem("@primeflix");
+
+    let filmesSalvos = JSON.parse(minhaLista) || [];
+
+    const hasFilme = filmesSalvos.some( (filmesSalvo) => filmesSalvo.id === filme.id)
+
+    if(hasFilme){
+      alert("ESSE FILME JÁ ESTA NA LISTA");
+      return;
+    }
+
+    filmesSalvos.push(filme);
+    localStorage.setItem("@primeflix", JSON.stringify(filmesSalvos));
+    alert("FILME SALVO COM SUCESSO")
+
+  }
 
   if(loading){
     return(
@@ -51,9 +74,9 @@ function Filme(){
       <strong>Avalição: {filme.vote_average} / 10</strong>
 
       <div className="area-buttons">
-        <button>Salvar</button>
+        <button onClick={salvarFilme}>Salvar</button>
         <button>
-          <a href="#">
+          <a target="blank" rel="external" href={`https://youtube.com/results?search_query=${filme.title} Trailer`}>
             Trailer
           </a>
         </button>
