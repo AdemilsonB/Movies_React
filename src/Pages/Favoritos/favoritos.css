@@ -37,3 +37,27 @@
   color: #116feb;
   margin-right: 14px;
 }
+
+.button-delete {
+  background-color: #ff5454;
+  border-radius: 4px;
+  color: white;
+  margin: 0px;
+  display: flex;
+  width: 56px;
+  text-align: center;
+  justify-content: center;
+  border: black solid 1px;
+}
+
+.button-details {
+  background-color: rgb(255, 255, 105);
+  border-radius: 4px;
+  margin: 0px;
+  display: flex;
+  width: 92px;
+  font-size: 14px;
+  text-align: center;
+  justify-content: center;
+  border: black solid 1px;
+}
